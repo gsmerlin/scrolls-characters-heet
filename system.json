@@ -1,0 +1,15 @@
+{
+  "name": "scrolls",
+  "title": "Scrolls of Placeholder",
+  "description": "Official Scrolls of Placeholder system for Foundry VTT",
+  "author": "Gabriel S. Merlin",
+  "version": 0.01,
+  "minimumCoreVersion": "0.7.9",
+  "compatibleCoreVersion": "0.7.9",
+  "esmodules": ["scrolls.js"],
+  "styles": ["scrolls.css"],
+  "gridDistance": 1,
+  "gridUnits": "u",
+  "primaryTokenAttribute": "vigor",
+  "secondaryTokenAttribute": "energy"
+}

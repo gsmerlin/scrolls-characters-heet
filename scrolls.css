@@ -1,0 +1,213 @@
+.objects-list {
+  list-style: none;
+  margin: 7px 0;
+  padding: 0;
+  overflow-y: auto;
+}
+.objects-list .object-header {
+  font-weight: bold;
+}
+.objects-list .object {
+  height: 30px;
+  line-height: 24px;
+  padding: 3px 0;
+  border-bottom: 1px solid #BBB;
+}
+.objects-list .object .object-image {
+  flex: 0 0 24px;
+  margin-right: 5px;
+}
+.objects-list .object img {
+  display: block;
+}
+.objects-list .object-name {
+  margin: 0;
+}
+.objects-list .object-controls {
+  flex: 0 0 86px;
+  text-align: right;
+}
+.resource-label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.tabs {
+  height: 40px;
+  border-top: 1px solid #AAA;
+  border-bottom: 1px solid #AAA;
+}
+.tabs .item {
+  line-height: 40px;
+  font-weight: bold;
+}
+.tabs .item.active {
+  text-decoration: underline;
+  text-shadow: none;
+}
+.flex-center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.flex-between {
+  justify-content: space-between;
+}
+.grid,
+.grid-2col {
+  display: grid;
+  grid-column: span 2 / span 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+}
+.grid-3col {
+  grid-column: span 3 / span 3;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-4col {
+  grid-column: span 4 / span 4;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.grid-5col {
+  grid-column: span 5 / span 5;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.grid-6col {
+  grid-column: span 5 / span 5;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.grid-7col {
+  grid-column: span 7 / span 7;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.grid-8col {
+  grid-column: span 8 / span 8;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+.grid-9col {
+  grid-column: span 9 / span 9;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+.grid-10col {
+  grid-column: span 10 / span 10;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+.grid-11col {
+  grid-column: span 11 / span 11;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+.grid-12col {
+  grid-column: span 12 / span 12;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.flex-group-center,
+.flex-group-left,
+.flex-group-right {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #999;
+}
+.flex-group-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+.flex-group-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+.window-app {
+  font-family: 'Roboto', sans-serif;
+}
+.rollable:hover,
+.rollable:focus {
+  color: #000;
+  text-shadow: 0 0 10px red;
+  cursor: pointer;
+}
+.editor {
+  height: 100%;
+  width: 100%;
+}
+@font-face {
+  font-family: 'Martel';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/martel/v5/PN_xRfK9oXHga0XtYQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Martel';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/martel/v5/PN_yRfK9oXHga0XVwe4ahQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmSU5vAw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Me5Q.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmEU9vAw.ttf) format('truetype');
+}
+.sheet form {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+.sheet .sheet-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.sheet .sheet-content .editor {
+  height: 100%;
+  width: 100%;
+}
+.sheet .sheet-content .quantity {
+  width: 20%;
+}
+.sheet .sheet-content .weight-class {
+  width: 40%;
+}
+.sheet .sheet-content .weight {
+  width: 40%;
+}
+.sheet .sheet-content .select,
+.sheet .sheet-content select {
+  width: 100%;
+}
+.sheet form {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+.sheet .sheet-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.sheet .sheet-content .editor {
+  height: 100%;
+  width: 100%;
+}
+.sheet img {
+  height: auto;
+  width: auto;
+}

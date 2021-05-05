@@ -1,0 +1,54 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <h1>
+      <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
+    </h1>
+  </header>
+  <div class="sheet-content">
+    <table>
+      <tr>
+        <th class="attacks-with">Attacks With</th>
+        <th class="damage">Damage</th>
+      </tr>
+      <tr>
+        <td>
+          <input name="data.attacksWith" type="text" value="{{data.attacksWith}}" placeholder="Attacks With"/>
+        </td>
+        <td>
+          <input name="data.damage" type="text" value="{{data.damage}}" placeholder="Damage Die"/>
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th class="quantity"> Quantity</th>
+        <th class="weight-class">Weight Class</th>
+        <th class="weight">Weight</th>
+      </tr>
+      <tr>
+        <td>
+          <input name="data.quantity" type="number" value="{{data.quantity}}" placeholder="Quantity"/>
+        </td>
+        <td>
+          <select name="data.weightClass" class="select">
+            {{#select data.weightClass}} {{#each config.weightClasses as |name
+            type|}}
+            <option value="{{type}}">{{name}}</option>
+            {{/each}} {{/select}}
+          </select>
+        </td>
+        <td>
+          <span name="data.weight" >{{data.weight}}</span>
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th>Description</th>
+      </tr>
+    </table>
+    {{editor content=data.description target="data.description" button=true
+    owner=owner editable=editable}}
+  </div>
+</form>

@@ -1,0 +1,133 @@
+{
+  "Actor": {
+    "types": ["Player", "NPC"],
+    "templates": {
+      "base": {
+        "vigor": {
+          "value": 0,
+          "max": 0
+        },
+        "energy": {
+          "value": 0,
+          "max": 0
+        },
+        "armor": 0,
+        "barrier": {
+          "value": 0,
+          "max": 0
+        },
+        "description": ""
+      }
+    },
+    "Player": {
+      "templates": ["base"],
+      "exp": 0,
+      "tExp": 0,
+      "attributes": {
+        "str": {
+          "name": "Strength",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "dex": {
+          "name": "Dexterity",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "vit": {
+          "name": "Vitality",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "kno": {
+          "name": "Knowledge",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "log": {
+          "name": "Logic",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "per": {
+          "name": "Perception",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "cha": {
+          "name": "Charisma",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "res": {
+          "name": "Resolve",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        }
+      }
+    },
+    "NPC": {
+      "templates": ["base"],
+      "attack": 0,
+      "guard": 0
+    }
+  },
+  "Item": {
+    "types": ["Weapon", "Armor", "Accessory", "Skill", "Technique", "Misc"],
+    "templates": {
+      "item-base": {
+        "quantity": 0,
+        "weightClass": ""
+      },
+      "description": {
+        "description": ""
+      }
+    },
+
+    "Weapon": {
+      "templates": ["item-base", "description"],
+      "attackWith": "",
+      "damage": 0
+    },
+    "Armor": {
+      "templates": ["item-base", "description"],
+      "guard": 0
+    },
+    "Accessory": {
+      "templates": ["item-base", "description"]
+    },
+    "Skill": {
+      "templates": ["description"],
+      "level": 0,
+      "mod": 0,
+      "exp": 0,
+      "rolled": false
+    },
+    "Technique": {
+      "templates": ["description"],
+      "parentSkill": "",
+      "level": 0,
+      "mod": 0,
+      "exp": 0
+    },
+    "Misc": {
+      "templates": ["item-base", "description"]
+    }
+  }
+}

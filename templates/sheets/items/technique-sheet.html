@@ -1,0 +1,65 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <h1>
+      <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
+    </h1>
+  </header>
+  <div class="sheet-content">
+    <table>
+      <tr>
+        <th>Parent Skill</th>
+      </tr>
+      <tr>
+        <td>
+          <input
+            name="data.parentSkill"
+            type="text"
+            value="{{data.parentSkill}}"
+            placeholder="Parent Skill"
+          />
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th>Level</th>
+        <th>Modifier</th>
+        <th>Experience</th>
+      </tr>
+      <tr>
+        <td>
+          <input
+            name="data.level"
+            type="number"
+            value="{{data.level}}"
+            placeholder="Level"
+          />
+        </td>
+        <td>
+          <input
+            name="data.mod"
+            type="number"
+            value="{{data.mod}}"
+            placeholder="Modifier"
+          />
+        </td>
+        <td>
+          <input
+            name="data.exp"
+            type="number"
+            value="{{data.exp}}"
+            placeholder="Experience"
+          />
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th>Description</th>
+      </tr>
+    </table>
+    {{editor content=data.description target="data.description" button=true
+    owner=owner editable=editable}}
+  </div>
+</form>
