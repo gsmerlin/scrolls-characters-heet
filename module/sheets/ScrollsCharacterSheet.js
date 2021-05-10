@@ -3,7 +3,7 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     return mergeObject(super.defaultOptions, {
       width: 700,
       height: 600,
-      classes: ["scrolls", "sheet", "player"],
+      classes: ["scrolls", "sheet", "Complex"],
       tabs: [
         {
           navSelector: ".sheet-tabs",
@@ -21,15 +21,14 @@ export default class ScrollsCharacterSheet extends ActorSheet {
   getData() {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
+    console.log(data);
     for (let attr of Object.values(data.data.attributes)) {
       attr.isCheckbox = attr.dtype === "Boolean";
     }
 
     console.log(this.actor.data.type);
     // Prepare items.
-    if (this.actor.data.type == "Player") {
-      this._prepareCharacterItems(data);
-    }
+    this._prepareCharacterItems(data);
 
     return data;
   }
@@ -70,6 +69,8 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     actorData.gear = gear;
     actorData.skills = skills;
     actorData.techniques = techniques;
+    console.log(game.user.isGM);
+    actorData.isGM = game.user.isGM;
     console.log(actorData);
   }
 
@@ -84,8 +85,6 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     // Update Inventory object
     html.find(".object-edit").click((ev) => {
       const li = $(ev.currentTarget).parents(".object");
-      console.log(li);
-      console.log(ev.currentTarget);
       const object = this.actor.getOwnedItem(li.data("objectId"));
       object.sheet.render(true);
     });
@@ -150,7 +149,10 @@ export default class ScrollsCharacterSheet extends ActorSheet {
         const technique = this.actor.data.items.find(
           (item) => item._id == dataset.id
         );
-        const parentSkill = this.actor.data.items.find((item) => item.name.toLowerCase() === technique.data.parentSkill.toLowerCase());
+        const parentSkill = this.actor.data.items.find(
+          (item) =>
+            item.name.toLowerCase() === technique.data.parentSkill.toLowerCase()
+        );
         const rollString = `1d20 + ${parentSkill.data.level} + ${parentSkill.data.mod} + ${technique.data.mod}`;
         const roll = new Roll(rollString);
         roll.roll().toMessage({
@@ -183,7 +185,6 @@ export default class ScrollsCharacterSheet extends ActorSheet {
       data: data,
     };
 
-    console.log(itemData);
     // Remove the type from the dataset since it's in the itemData.type prop.
     delete itemData.data["type"];
 

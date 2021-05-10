@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["Player", "NPC"],
+    "types": ["Complex", "Simple"],
     "templates": {
       "base": {
         "vigor": {
@@ -16,13 +16,13 @@
           "value": 0,
           "max": 0
         },
-        "description": ""
+        "description": "",
+        "exp": 0,
+        "tExp": 0
       }
     },
-    "Player": {
+    "Complex": {
       "templates": ["base"],
-      "exp": 0,
-      "tExp": 0,
       "attributes": {
         "str": {
           "name": "Strength",
@@ -82,10 +82,31 @@
         }
       }
     },
-    "NPC": {
+    "Simple": {
       "templates": ["base"],
-      "attack": 0,
-      "guard": 0
+      "attributes": {
+        "phy": {
+          "name": "Physical",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "men": {
+          "name": "Mental",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        },
+        "soc": {
+          "name": "Social",
+          "value": 0,
+          "exp": 0,
+          "mod": "+0",
+          "rolled": false
+        }
+      }
     }
   },
   "Item": {

@@ -211,3 +211,25 @@
   height: auto;
   width: auto;
 }
+.sheet .object {
+  word-wrap: normal;
+  height: 100%;
+}
+.sheet form {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+.sheet .sheet-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.sheet .sheet-content .editor {
+  height: 100%;
+  width: 100%;
+}
+.sheet img {
+  height: auto;
+  width: auto;
+}

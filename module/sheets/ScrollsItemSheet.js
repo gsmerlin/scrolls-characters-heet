@@ -22,7 +22,9 @@ export default class ScrollsItemSheet extends ItemSheet {
       ? calcWeight(data.data.weightClass, data.data.quantity)
       : null;
 
-  console.log(data);
-    return data;
+    data.data.isGM = game.user.isGM;
+    console.log(data);
+    return data;  
   }
+
 }
