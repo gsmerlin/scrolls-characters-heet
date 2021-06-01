@@ -1,0 +1,41 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <h1>
+      <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
+    </h1>
+  </header>
+  <div class="sheet-content">
+    <table>
+      <tr>
+        <th>Experience Cost</th>
+        <th>Energy Cost</th>
+      </tr>
+      <tr>
+        <td>
+          <input
+            name="data.expCost"
+            type="number"
+            value="{{data.data.expCost}}"
+            placeholder="Experience Cost"
+          />
+        </td>
+        <td>
+          <input
+            name="data.energyCost"
+            type="number"
+            value="{{data.data.energyCost}}"
+            placeholder="Energy Cost"
+          />
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th>Description</th>
+      </tr>
+    </table>
+    {{editor content=data.data.description target="data.description" button=true
+    owner=owner editable=editable}}
+  </div>
+</form>

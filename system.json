@@ -3,7 +3,7 @@
   "title": "Scrolls of Placeholder",
   "description": "Official Scrolls of Placeholder system for Foundry VTT",
   "author": "Gabriel S. Merlin",
-  "version": 0.01,
+  "version": "1.0.1",
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "esmodules": ["scrolls.js"],

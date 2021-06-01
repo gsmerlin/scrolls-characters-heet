@@ -1,0 +1,201 @@
+<form class="actor-sheet {{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
+    <h1 class="charname">
+      <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+    </h1>
+    <div style="flex: 0 0 25px">
+      <label for="data.level" class="resource-label">Level</label>
+      <div class="resource-content flexrow flex-center flex-between">
+        <span type="text" name="data.level">{{data.data.level}}</span>
+      </div>
+    </div>
+  </header>
+  <div class="header-fields">
+    <div class="resources grid grid-5col">
+      <div class="resource flex-group-center">
+        <label for="data.vigor.value" class="resource-label">Vigor</label>
+        <br />
+        <label>Curr. / Total</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.vigor.value" value="{{data.data.vigor.value}}" data-dtype="Number" />
+          <span> / </span>
+          <span name="data.vigor.max">{{data.data.vigor.max}}</span>
+        </div>
+      </div>
+      <div class="resource flex-group-center">
+        <label for="data.energy.value" class="resource-label">Energy</label>
+        <br />
+        <label>Curr. / Total</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.energy.value" value="{{data.data.energy.value}}" data-dtype="Number" />
+          <span> / </span>
+          <span name="data.energy.max">{{data.data.energy.max}}</span>
+        </div>
+      </div>
+      <div class="resource flex-group-center">
+        <label for="data.barrier.value" class="resource-label">Barrier</label>
+        <br />
+        <label>Curr. / Total</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.barrier.value" value="{{data.data.barrier.value}}" data-dtype="Number" />
+          <span> / </span>
+          <input type="text" name="data.barrier.max" value="{{data.data.barrier.max}}" data-dtype="Number" />
+        </div>
+      </div>
+      <div class="resource flex-group-center">
+        <label for="data.armor" class="resource-label">Armor</label>
+        <br />
+        <label>Total</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.armor" value="{{data.data.armor}}" data-dtype="Number" />
+        </div>
+      </div>
+      <div class="resource flex-group-center">
+        <label for="data.exp" class="resource-label">Experience</label>
+        <br />
+        <label>Free / Used</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="data.exp" value="{{data.data.exp}}" data-dtype="Number" />
+          <span> / </span>
+          <span name="data.tExp">{{data.data.tExp}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="attributes">
+      <div class="resources grid grid-3col">
+        {{#each data.data.attributes as |attribute key|}}
+        <div class="resource flex-group-center macro" draggable="true" id={{key}}>
+          <label class="resource-label rollable" name="data.attributes.{{key}}.name"
+            data-roll="d20+@attributes.{{key}}.value+@attributes.{{key}}.mod" data-label="{{attribute.name}}"
+            data-type="attribute" for="data.attributes.{{key}}.value">{{attribute.name}}</label>
+          <div class="resource-content flexrow flex-center flex-between">
+            <label>Level</label>
+            <label>Modifier</label>
+          </div>
+          <div class="resource-content flexrow flex-center flex-between">
+            <input type="text" name="data.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="Number" />
+            <input class="attribute-mod" name="data.attributes.{{key}}.mod" type="text" value="{{attribute.mod}}"
+              data-dtype="String" />
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">Description</a>
+    <a class="item" data-tab="items">Items</a>
+    <a class="item" data-tab="skills">Skills</a>
+    <a class="item" data-tab="techniques">Techniques</a>
+  </nav>
+
+  <section class="sheet-body sheet-content">
+    <div class="tab biography editor-wrapper" data-group="primary" data-tab="description">
+      {{editor content=data.data.description target="data.description"
+      button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Owned Items Tab --}}
+    <div class="tab items" data-group="primary" data-tab="items">
+      <table>
+        <tr>
+          <th></th>
+          {{!-- Item image --}}
+          <th>Name</th>
+          <th></th>
+          {{!-- View item button --}}
+        </tr>
+        {{#each actor.gear as |object id|}}
+        <tr class="macro" draggable="true" id="{{object._id}}" data-id="{{object._id}}">
+          <td>
+            <img class="object-image" src="{{object.img}}" title="{{object.name}}" />
+          </td>
+          <td>
+            <h4 class="object-name">{{object.name}}</h4>
+          </td>
+          <td>
+            <a class="object-control object-view" title="View Object"><i class="fas fa-eye"
+                data-object-id="{{object._id}}"></i></a>
+          </td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+
+    {{!-- Owned skills Tab --}}
+    <div class="tab skills" data-group="primary" data-tab="skills">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Level</th>
+          <th>Modifier</th>
+          <th>Rolled</th>
+          <th></th>
+        </tr>
+        {{#each actor.skills as |object id|}}
+        <tr class="macro" draggable="true" id="{{object._id}}" data-id="{{object._id}}">
+          <td>
+            <h4 class="object-name">
+              <label class="resource-label rollable" data-type="Skill" data-id="{{object._id}}">{{object.name}}</label>
+            </h4>
+          </td>
+          <td>
+            <h4 class="object-level">{{object.data.level}}</h4>
+          </td>
+          <td>
+            <h4 class="object-modifier">{{object.data.mod}}</h4>
+          </td>
+          <td>
+            <h4 class="object-rolled">
+              <input type="checkbox" class="skill-rolled" onclick="return false" {{ checked object.data.rolled }} />
+            </h4>
+          </td>
+          <td>
+            <div class="object-controls">
+              <a class="object-control object-view" title="View Object"><i class="fas fa-eye"
+                  data-object-id="{{object._id}}"></i></a>
+            </div>
+          </td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+
+    {{!-- Owned techniques Tab --}}
+    <div class="tab techniques" data-group="primary" data-tab="techniques">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Level</th>
+          <th>Modifier</th>
+          <th>Energy Cost</th>
+          <th></th>
+        </tr>
+        {{#each actor.techniques as |object id|}}
+        <tr class="macro" draggable="true" id="{{object._id}}" data-id="{{object._id}}">
+          <td>
+            <label class="resource-label rollable" data-type="Technique"
+              data-id="{{object._id}}">{{object.name}}</label>
+          </td>
+          <td>
+            <h4>{{object.data.level}}</h4>
+          </td>
+          <td>
+            <h4>{{object.data.mod}}</h4>
+          </td>
+          <td>
+            <h4>{{object.data.cost}}</h4>
+          </td>
+          <td>
+            <a class="object-control object-view" title="View Object"><i class="fas fa-eye"
+                data-object-id="{{object._id}}"></i></a>
+          </td>
+          {{/each}}
+        </tr>
+      </table>
+    </div>
+  </section>
+</form>

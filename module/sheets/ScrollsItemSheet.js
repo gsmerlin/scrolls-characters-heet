@@ -5,6 +5,13 @@ export default class ScrollsItemSheet extends ItemSheet {
       width: 400,
       height: 750,
       classes: ["scrolls", "sheet", "item"],
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "description",
+        },
+      ],      
     });
   }
 

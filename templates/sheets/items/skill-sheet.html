@@ -1,11 +1,27 @@
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
-    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <img
+      src="{{item.img}}"
+      data-edit="img"
+      title="{{item.name}}"
+      height="64"
+      width="64"
+    />
     <h1>
+      {{#if data.isGM}}
       <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
+      {{else}}
+      <input
+        name="name"
+        type="text"
+        value="{{item.name}}"
+        placeholder="Name"
+        disabled
+      />
+      {{/if}}
     </h1>
   </header>
-  <div class="sheet-content">
+<div class="sheet-content">
     <table>
       <tr>
         <th>Level</th>
@@ -15,31 +31,43 @@
       </tr>
       <tr>
         <td>
+          {{#if data.isGM}}
           <input
             name="data.level"
             type="number"
-            value="{{data.level}}"
+            value="{{data.data.level}}"
             placeholder="Level"
           />
+          {{else}}
+          <span name="{{data.data.level}}">{{data.data.level}}</span>
+          {{/if}}
         </td>
         <td>
+          {{#if data.isGM}}
           <input
             name="data.mod"
             type="number"
-            value="{{data.mod}}"
+            value="{{data.data.mod}}"
             placeholder="Modifier"
           />
+          {{else}}
+          <span name="{{data.data.mod}}">{{data.data.mod}}</span>
+          {{/if}}
         </td>
         <td>
+          {{#if data.isGM}}
           <input
             name="data.exp"
             type="number"
-            value="{{data.exp}}"
+            value="{{data.data.exp}}"
             placeholder="Experience"
           />
+          {{else}}
+          <span name="{{data.data.exp}}">{{data.data.exp}}</span>
+          {{/if}}
         </td>
         <td>
-          <input name="data.rolled" type="checkbox" {{ checked data.rolled }} />
+          <input name="data.rolled" type="checkbox" {{ checked data.data.rolled }} />
         </td>
       </tr>
     </table>
@@ -48,7 +76,10 @@
         <th>Description</th>
       </tr>
     </table>
-    {{editor content=data.description target="data.description" button=true
-    owner=owner editable=editable}}
+    {{#if data.isGM}} {{editor content=data.data.description
+    target="data.description" button=true owner=owner editable=editable}}
+    {{else}}
+    <span name="data.description">{{{data.data.description}}}</span>
+    {{/if}}
   </div>
 </form>

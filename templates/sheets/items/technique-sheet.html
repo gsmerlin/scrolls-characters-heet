@@ -15,8 +15,23 @@
           <input
             name="data.parentSkill"
             type="text"
-            value="{{data.parentSkill}}"
+            value="{{data.data.parentSkill}}"
             placeholder="Parent Skill"
+          />
+        </td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th>Technique Type</th>
+      </tr>
+      <tr>
+        <td>
+          <input
+            name="data.type"
+            type="text"
+            value="{{data.data.type}}"
+            placeholder="Technique Type"
           />
         </td>
       </tr>
@@ -26,13 +41,14 @@
         <th>Level</th>
         <th>Modifier</th>
         <th>Experience</th>
+        <th>Energy Cost</th>
       </tr>
       <tr>
         <td>
           <input
             name="data.level"
             type="number"
-            value="{{data.level}}"
+            value="{{data.data.level}}"
             placeholder="Level"
           />
         </td>
@@ -40,7 +56,7 @@
           <input
             name="data.mod"
             type="number"
-            value="{{data.mod}}"
+            value="{{data.data.mod}}"
             placeholder="Modifier"
           />
         </td>
@@ -48,18 +64,30 @@
           <input
             name="data.exp"
             type="number"
-            value="{{data.exp}}"
+            value="{{data.data.exp}}"
             placeholder="Experience"
+          />
+        </td>
+        <td>
+          <input
+            name="data.cost"
+            type="number"
+            value="{{data.data.cost}}"
+            placeholder="Energy Cost"
           />
         </td>
       </tr>
     </table>
-    <table>
-      <tr>
-        <th>Description</th>
-      </tr>
-    </table>
-    {{editor content=data.description target="data.description" button=true
-    owner=owner editable=editable}}
+
+    <nav class="sheet-tabs tabs"> 
+      <a class="item" data-tab="description">Description</a>
+    </nav>
+
+    <section class="sheet-body">
+      <div class="editor-wrapper tab" data-tab="description">
+        {{editor content=data.data.description target="data.description" button=true
+        owner=owner editable=editable}}
+      </div>
+    </section>
   </div>
 </form>

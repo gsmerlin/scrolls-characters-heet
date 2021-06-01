@@ -176,7 +176,7 @@
   display: flex;
   flex-direction: column;
 }
-.sheet .sheet-content .editor {
+.sheet .sheet-content .biography {
   height: 100%;
   width: 100%;
 }
@@ -193,10 +193,24 @@
 .sheet .sheet-content select {
   width: 100%;
 }
+.editor-wrapper {
+  display: flex;
+  height: 100%;
+  min-height: 120px;
+}
+.editor,
+.editor-content {
+  flex: 1;
+  height: 100%;
+  min-height: 30px;
+}
 .sheet form {
   display: flex;
   text-align: center;
   flex-direction: column;
+}
+.sheet .level-label {
+  width: 10%;
 }
 .sheet .sheet-content {
   height: 100%;
@@ -207,29 +221,11 @@
   height: 100%;
   width: 100%;
 }
-.sheet img {
+.sheet .profile-img {
   height: auto;
   width: auto;
 }
-.sheet .object {
-  word-wrap: normal;
-  height: 100%;
-}
-.sheet form {
-  display: flex;
-  text-align: center;
-  flex-direction: column;
-}
-.sheet .sheet-content {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.sheet .sheet-content .editor {
-  height: 100%;
-  width: 100%;
-}
-.sheet img {
-  height: auto;
-  width: auto;
+.sheet .object-image {
+  height: 25px;
+  width: 25px;
 }

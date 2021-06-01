@@ -1,9 +1,9 @@
 export default class ScrollsCharacterSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      width: 700,
-      height: 600,
-      classes: ["scrolls", "sheet", "Complex"],
+      width: 530,
+      height: 700,
+      classes: ["scrolls", "sheet", "character"],
       tabs: [
         {
           navSelector: ".sheet-tabs",
@@ -15,22 +15,24 @@ export default class ScrollsCharacterSheet extends ActorSheet {
   }
 
   get template() {
-    return `systems/scrolls/templates/sheets/characters/${this.actor.data.type}-sheet.html`;
+    return `systems/scrolls/templates/sheets/character-sheet.html`;
   }
 
   getData() {
-    const data = super.getData();
+    const sheetData = super.getData();
+    const data = sheetData.data;
+    console.log(this);
     data.dtypes = ["String", "Number", "Boolean"];
-    console.log(data);
     for (let attr of Object.values(data.data.attributes)) {
       attr.isCheckbox = attr.dtype === "Boolean";
     }
 
-    console.log(this.actor.data.type);
     // Prepare items.
-    this._prepareCharacterItems(data);
+    this._prepareCharacterItems(sheetData);
 
-    return data;
+    sheetData.data = data;
+    console.log(sheetData);
+    return sheetData;
   }
 
   _prepareCharacterItems(sheetData) {
@@ -45,7 +47,6 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     // let totalWeight = 0;
     for (let i of sheetData.items) {
       let item = i.data;
-      console.log(i.type);
       i.img = i.img || DEFAULT_TOKEN;
       // Append to gear.
       switch (i.type) {
@@ -69,9 +70,26 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     actorData.gear = gear;
     actorData.skills = skills;
     actorData.techniques = techniques;
-    console.log(game.user.isGM);
     actorData.isGM = game.user.isGM;
-    console.log(actorData);
+
+    actorData.skills.sort((a, b) => {
+      if (a.data.level > b.data.level) {
+        return -1;
+      }
+      if (a.data.level < b.data.level) {
+        return 1;
+      }
+      return 0;
+    });
+    actorData.techniques.sort((a, b) => {
+      if (a.data.level > b.data.level) {
+        return -1;
+      }
+      if (a.data.level < b.data.level) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   activateListeners(html) {
@@ -83,31 +101,68 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     html.find(".object-create").click(this._onObjectCreate.bind(this));
 
     // Update Inventory object
-    html.find(".object-edit").click((ev) => {
-      const li = $(ev.currentTarget).parents(".object");
-      const object = this.actor.getOwnedItem(li.data("objectId"));
+    html.find(".object-view").click((ev) => {
+      const object = this.actor.items.get(ev.target.dataset.objectId);
       object.sheet.render(true);
     });
 
     // Delete Inventory object
     html.find(".object-delete").click((ev) => {
-      const li = $(ev.currentTarget).parents(".object");
-      this.actor.deleteOwnedItem(li.data("objectId"));
-      li.slideUp(200, () => this.render(false));
+      this.actor.deleteOwnedItem(ev.target.dataset.objectId);
+      this.render(true);
     });
 
-    // Drag events for macros.
-    if (this.actor.owner) {
-      let handler = (ev) => this._onDragStart(ev);
-      html.find("li.object").each((i, li) => {
-        if (li.classList.contains("inventory-header")) return;
-        li.setAttribute("draggable", true);
-        li.addEventListener("dragstart", handler, false);
-      });
-    }
+    html.find(".macro").each((i, tr) => {
+      tr.addEventListener("dragstart", (ev) => this._onDragStart(ev), false);
+    });
   }
 
-  _onRoll(event) {
+  _onDragStart(event) {
+    if (event.target.classList.contains("entity-link")) return;
+
+    // Create drag data
+    const dragData = {
+      actorId: this.actor.id,
+    };
+
+    const item = this.actor.items.get(event.target.id);
+    console.log(item);
+    if (item) {
+      // Skill, Technique or Item
+      dragData.type = item.data.type;
+      dragData.data = item.data;
+      // Set data transfer
+      return event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+    }
+
+    dragData.type = "Attribute";
+    switch (event.target.id) {
+      default: {
+        // Physical
+        dragData.name = "phy";
+        dragData.data = this.actor.data.data.attributes.phy;
+        break;
+      }
+      case "men": {
+        // Mental
+        dragData.name = "men";
+        dragData.data = this.actor.data.data.attributes.men;
+        break;
+      }
+      case "soc": {
+        // Social
+        dragData.name = "soc";
+        dragData.data = this.actor.data.data.attributes.soc;
+        break;
+      }
+    }
+    // Set data transfer
+    return event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+  }
+
+  /* -------------------------------------------- */
+
+  async _onRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
@@ -115,58 +170,60 @@ export default class ScrollsCharacterSheet extends ActorSheet {
       default: {
         // Attribute roll
         const roll = new Roll(dataset.roll, this.actor.data.data);
-        console.log(dataset);
         const label = dataset.label ? `Rolling ${dataset.label}` : "";
-        roll.roll().toMessage({
+        roll.toMessage({
           speaker: ChatMessage.getSpeaker({ actor: this.actor }),
           flavor: label,
-        });
-        this.actor.update({
-          [`data.attributes.${dataset.label}.rolled`]: true,
         });
         break;
       }
       case "Skill": {
         const skill = this.actor.data.items.find(
-          (item) => item._id == dataset.id
+          (item) => item.id == dataset.id
         );
-        const rollString = `1d20 + ${skill.data.level} + ${skill.data.mod}`;
+        const rollString = `1d20 + ${skill.data.data.level} + ${skill.data.data.mod}`;
         const roll = new Roll(rollString);
-        roll.roll().toMessage({
+        roll.toMessage({
           speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          flavor: skill.name,
+          flavor: skill.data.name,
         });
-        console.log(rollString);
-        console.log(skill);
-        skill.rolled = true;
-        this.actor.updateEmbeddedEntity("OwnedItem", {
-          _id: skill._id,
-          "data.rolled": true,
-        });
+        skill.data.data.rolled = true;
+        this.actor.updateEmbeddedDocuments("Item", [
+          {
+            _id: skill.id,
+            ...skill,
+            "data.rolled": true,
+          },
+        ]);
         break;
       }
       case "Technique": {
         const technique = this.actor.data.items.find(
-          (item) => item._id == dataset.id
+          (item) => item.id == dataset.id
         );
         const parentSkill = this.actor.data.items.find(
           (item) =>
-            item.name.toLowerCase() === technique.data.parentSkill.toLowerCase()
+            item.name.toLowerCase() ===
+            technique.data.data.parentSkill.toLowerCase()
         );
-        const rollString = `1d20 + ${parentSkill.data.level} + ${parentSkill.data.mod} + ${technique.data.mod}`;
+        const rollString = `1d20 + ${parentSkill.data.data.level} + ${parentSkill.data.data.mod} + ${technique.data.data.mod}`;
         const roll = new Roll(rollString);
-        roll.roll().toMessage({
+        roll.toMessage({
           speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          flavor: technique.name,
+          flavor: technique.data.name,
         });
-        parentSkill.rolled = true;
-        this.actor.updateEmbeddedEntity("OwnedItem", {
-          _id: parentSkill._id,
-          "data.rolled": true,
-        });
+        parentSkill.data.data.rolled = true;
+        this.actor.updateEmbeddedDocuments("Item", [
+          {
+            _id: parentSkill.id,
+            ...parentSkill,
+            "data.rolled": true,
+          },
+        ]);
         break;
       }
     }
+    this.render();
   }
 
   _onObjectCreate(event) {

@@ -1,116 +1,43 @@
 {
   "Actor": {
-    "types": ["Complex", "Simple"],
-    "templates": {
-      "base": {
-        "vigor": {
-          "value": 0,
-          "max": 0
-        },
-        "energy": {
-          "value": 0,
-          "max": 0
-        },
-        "armor": 0,
-        "barrier": {
-          "value": 0,
-          "max": 0
-        },
-        "description": "",
-        "exp": 0,
-        "tExp": 0
-      }
-    },
-    "Complex": {
-      "templates": ["base"],
-      "attributes": {
-        "str": {
-          "name": "Strength",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "dex": {
-          "name": "Dexterity",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "vit": {
-          "name": "Vitality",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "kno": {
-          "name": "Knowledge",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "log": {
-          "name": "Logic",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "per": {
-          "name": "Perception",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "cha": {
-          "name": "Charisma",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        },
-        "res": {
-          "name": "Resolve",
-          "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
-        }
-      }
-    },
-    "Simple": {
-      "templates": ["base"],
+    "types": ["character"],
+    "character": {
+      "vigor": {
+        "value": 0,
+        "max": 0
+      },
+      "energy": {
+        "value": 0,
+        "max": 0
+      },
+      "armor": 0,
+      "barrier": {
+        "value": 0,
+        "max": 0
+      },
+      "description": "",
+      "exp": 0,
       "attributes": {
         "phy": {
           "name": "Physical",
           "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
+          "mod": "+0"
         },
         "men": {
           "name": "Mental",
           "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
+          "mod": "+0"
         },
         "soc": {
           "name": "Social",
           "value": 0,
-          "exp": 0,
-          "mod": "+0",
-          "rolled": false
+          "mod": "+0"
         }
       }
     }
   },
   "Item": {
-    "types": ["Weapon", "Armor", "Accessory", "Skill", "Technique", "Misc"],
+    "types": ["Weapon", "Armor", "Accessory", "Skill", "Technique", "Misc", "Effect"],
     "templates": {
       "item-base": {
         "quantity": 0,
@@ -143,12 +70,19 @@
     "Technique": {
       "templates": ["description"],
       "parentSkill": "",
+      "type": "",
       "level": 0,
       "mod": 0,
-      "exp": 0
+      "exp": 0,
+      "cost": 0
     },
     "Misc": {
       "templates": ["item-base", "description"]
+    },
+    "Effect": {
+      "templates":["description"],
+      "expCost": 0,
+      "energyCost": 0
     }
   }
 }
