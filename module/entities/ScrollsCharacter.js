@@ -23,7 +23,6 @@ export default class ScrollsCharacter extends Actor {
       this.data.data.vigor.max += attribute.value * 3;
       this.data.data.energy.max += attribute.value;
       attribute.mod = attribute.mod ?? "+0";
-      attribute.rolled = attribute.rolled ?? false;
     }
     this.data.items.forEach((item) => {
       if (item.type === "Skill" || item.type === "Technique") {
@@ -36,7 +35,7 @@ export default class ScrollsCharacter extends Actor {
     if (this.data.data.energy.value > this.data.data.energy.max)
       this.data.data.energy.value = this.data.data.energy.max;
 
-    this.data.data.level = this.data.data.tExp / 10;
+    this.data.data.level = Math.floor(this.data.data.tExp / 10) + 1;
 
     console.log("======== Finished preparing character data ========");
   }

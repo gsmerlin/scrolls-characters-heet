@@ -21,17 +21,11 @@ export default class ScrollsCharacterSheet extends ActorSheet {
   getData() {
     const sheetData = super.getData();
     const data = sheetData.data;
-    console.log(this);
-    data.dtypes = ["String", "Number", "Boolean"];
-    for (let attr of Object.values(data.data.attributes)) {
-      attr.isCheckbox = attr.dtype === "Boolean";
-    }
 
     // Prepare items.
     this._prepareCharacterItems(sheetData);
 
     sheetData.data = data;
-    console.log(sheetData);
     return sheetData;
   }
 
@@ -46,7 +40,6 @@ export default class ScrollsCharacterSheet extends ActorSheet {
     // Iterate through items, allocating to containers
     // let totalWeight = 0;
     for (let i of sheetData.items) {
-      let item = i.data;
       i.img = i.img || DEFAULT_TOKEN;
       // Append to gear.
       switch (i.type) {
@@ -112,9 +105,43 @@ export default class ScrollsCharacterSheet extends ActorSheet {
       this.render(true);
     });
 
+    html.find(".object-levelup").click(this._onSkillLevelUp.bind(this));
+
     html.find(".macro").each((i, tr) => {
       tr.addEventListener("dragstart", (ev) => this._onDragStart(ev), false);
     });
+  }
+
+  _onSkillLevelUp(event) {
+    console.log(event.target.dataset.objectId);
+    const skill = this.actor.items.get(event.target.dataset.objectId);
+    console.log(skill);
+    console.log(this.actor);
+    if (!skill.data.data.rolled) {
+      return ui.notifications.warn(
+        `${skill.data.name} has not been rolled yet and cannot be leveled up!`
+      );
+    }
+    if (this.actor.data.data.exp < 2) {
+      return ui.notifications.warn(
+        `${this.actor.data.name} does not have enough experience to level up ${skill.data.name}!`
+      );
+    }
+    const exp = this.actor.data.data.exp - 2;
+    this.actor.update({
+      "data.exp": exp,
+    });
+    console.log(skill.data.data);
+    const level = skill.data.data.level + 1;
+    const skillExp = skill.data.data.exp + 2;
+    this.actor.updateEmbeddedDocuments("Item", [
+      {
+        _id: skill.id,
+        "data.level": level,
+        "data.rolled": false,
+        "data.exp": skillExp,
+      },
+    ]);
   }
 
   _onDragStart(event) {
@@ -178,52 +205,14 @@ export default class ScrollsCharacterSheet extends ActorSheet {
         break;
       }
       case "Skill": {
-        const skill = this.actor.data.items.find(
-          (item) => item.id == dataset.id
-        );
-        const rollString = `1d20 + ${skill.data.data.level} + ${skill.data.data.mod}`;
-        const roll = new Roll(rollString);
-        roll.toMessage({
-          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          flavor: skill.data.name,
-        });
-        skill.data.data.rolled = true;
-        this.actor.updateEmbeddedDocuments("Item", [
-          {
-            _id: skill.id,
-            ...skill,
-            "data.rolled": true,
-          },
-        ]);
+        game.scrolls.rollSkillMacro(this.actor.id, dataset.id);
         break;
       }
       case "Technique": {
-        const technique = this.actor.data.items.find(
-          (item) => item.id == dataset.id
-        );
-        const parentSkill = this.actor.data.items.find(
-          (item) =>
-            item.name.toLowerCase() ===
-            technique.data.data.parentSkill.toLowerCase()
-        );
-        const rollString = `1d20 + ${parentSkill.data.data.level} + ${parentSkill.data.data.mod} + ${technique.data.data.mod}`;
-        const roll = new Roll(rollString);
-        roll.toMessage({
-          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-          flavor: technique.data.name,
-        });
-        parentSkill.data.data.rolled = true;
-        this.actor.updateEmbeddedDocuments("Item", [
-          {
-            _id: parentSkill.id,
-            ...parentSkill,
-            "data.rolled": true,
-          },
-        ]);
+        game.scrolls.rollTechniqueMacro(this.actor.id, dataset.id);
         break;
       }
     }
-    this.render();
   }
 
   _onObjectCreate(event) {

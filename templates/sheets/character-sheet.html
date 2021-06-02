@@ -134,6 +134,8 @@
           <th>Modifier</th>
           <th>Rolled</th>
           <th></th>
+          <th></th>
+          <th></th>
         </tr>
         {{#each actor.skills as |object id|}}
         <tr class="macro" draggable="true" id="{{object._id}}" data-id="{{object._id}}">
@@ -149,13 +151,23 @@
             <h4 class="object-modifier">{{object.data.mod}}</h4>
           </td>
           <td>
-            <h4 class="object-rolled">
-              <input type="checkbox" class="skill-rolled" onclick="return false" {{ checked object.data.rolled }} />
-            </h4>
+            <input type="checkbox" class="skill-rolled" name="data.rolled" onclick="return false" {{checked object.data.rolled}}/>
           </td>
           <td>
             <div class="object-controls">
-              <a class="object-control object-view" title="View Object"><i class="fas fa-eye"
+              <a class="object-control object-view" title="View Skill"><i class="fas fa-eye"
+                  data-object-id="{{object._id}}"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="object-controls">
+              <a class="object-control object-levelup" title="Level up Skill"><i class="fas fa-plus"
+                  data-object-id="{{object._id}}"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="object-controls">
+              <a class="object-control object-delete" title="Delete Skill"><i class="fas fa-trash"
                   data-object-id="{{object._id}}"></i></a>
             </div>
           </td>
@@ -172,6 +184,8 @@
           <th>Level</th>
           <th>Modifier</th>
           <th>Energy Cost</th>
+          <th></th>
+          <th></th>
           <th></th>
         </tr>
         {{#each actor.techniques as |object id|}}
@@ -190,8 +204,22 @@
             <h4>{{object.data.cost}}</h4>
           </td>
           <td>
-            <a class="object-control object-view" title="View Object"><i class="fas fa-eye"
-                data-object-id="{{object._id}}"></i></a>
+            <div class="object-controls">
+              <a class="object-control object-view" title="View Skill"><i class="fas fa-eye"
+                  data-object-id="{{object._id}}"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="object-controls">
+              <a class="object-control object-levelup" title="Level up Skill"><i class="fas fa-plus"
+                  data-object-id="{{object._id}}"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="object-controls">
+              <a class="object-control object-delete" title="Delete Skill"><i class="fas fa-trash"
+                  data-object-id="{{object._id}}"></i></a>
+            </div>
           </td>
           {{/each}}
         </tr>

@@ -6,12 +6,11 @@ export const createMacro = async (data, slot) => {
   switch (data.type) {
     default: {
       // Skill
-      const skill = actor.skills.find((skill) => skill._id === data.data.id);
       macro = await Macro.create({
-        name: skill.name,
+        name: data.data.name,
         type: "script",
-        img: skill.img,
-        command: `game.scrolls.rollSkillMacro("${data.actorId}", "${skill._id}")`,
+        img: data.data.img,
+        command: `game.scrolls.rollSkillMacro("${data.actorId}", "${data.data._id}")`,
         flags: { "scrolls.skillMacro": true },
       });
       break;
@@ -20,21 +19,18 @@ export const createMacro = async (data, slot) => {
       macro = await Macro.create({
         name: data.data.name,
         type: "script",
+        image: "icons/svg/degen.svg",
         command: `game.scrolls.rollAttributeMacro("${data.actorId}", "${data.name}", "${data.data.name}")`,
         flags: { "scrolls.attributeMacro": true },
       });
       break;
     }
     case "Technique": {
-      const technique = actor.techniques.find(
-        (item) => item.id == data.data.id
-      );
-      console.log(technique);
       macro = await Macro.create({
-        name: technique.name,
+        name: data.data.name,
         type: "script",
-        img: technique.img,
-        command: `game.scrolls.rollTechniqueMacro("${data.actorId}", "${technique._id}")`,
+        img: data.data.img,
+        command: `game.scrolls.rollTechniqueMacro("${data.actorId}", "${data.data._id}")`,
         flags: { "scrolls.techniqueMacro": true },
       });
       break;
@@ -46,25 +42,22 @@ export const createMacro = async (data, slot) => {
 
 export const rollSkillMacro = (actorId, skillId) => {
   const actor = game.actors.get(actorId);
-  const skill = actor.data.items.find((skill) => skill._id === skillId);
+  const skill = actor.data.items.find((skill) => skill.id === skillId);
   const rollString = `1d20 + ${skill.data.data.level} + ${skill.data.data.mod}`;
   const roll = new Roll(rollString);
   roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: skill.data.name,
   });
-  skill.data.data.rolled = true;
-  actor.updateEmbeddedDocuments(
-    "Item",
-    [
-      {
-        _id: skill.id,
-        ...skill,
-        "data.rolled": true,
+  actor.updateEmbeddedDocuments("Item", [
+    {
+      _id: skill.id,
+      data: {
+        ...skill.data,
+        rolled: true,
       },
-    ],
-    { render: true, renderSheet: true }
-  );
+    },
+  ]);
 };
 
 export const rollAttributeMacro = (actorId, attributeKey, attributeName) => {
@@ -81,25 +74,41 @@ export const rollAttributeMacro = (actorId, attributeKey, attributeName) => {
 export const rollTechniqueMacro = (actorId, techniqueId) => {
   const actor = game.actors.get(actorId);
   const technique = actor.data.items.find((item) => item.id == techniqueId);
+  const energyCost = technique.data.data.cost;
+  if (energyCost > actor.data.data.energy.value) {
+    return ui.notifications.warn(
+      `${actor.data.name} does not have enough energy to use ${technique.name}!`
+    );
+  }
+  const newEn = actor.data.data.energy.value - energyCost;
   const parentSkill = actor.data.items.find(
     (item) =>
       item.name.toLowerCase() === technique.data.data.parentSkill.toLowerCase()
   );
-
-  console.log(technique);
-  console.log(parentSkill);
   const rollString = `1d20 + ${parentSkill.data.data.level} + ${parentSkill.data.data.mod} + ${technique.data.data.mod}`;
   const roll = new Roll(rollString);
   roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: `Rolling ${technique.data.name}`,
   });
-  parentSkill.data.data.rolled = true;
+
+  actor.update({
+    data: {
+      ...actor.data,
+      energy: {
+        ...actor.data.energy,
+        value: newEn,
+      },
+    },
+  });
+
   actor.updateEmbeddedDocuments("Item", [
     {
       _id: parentSkill.id,
-      ...parentSkill,
-      "data.rolled": true,
+      data: {
+        ...parentSkill.data,
+        rolled: true,
+      },
     },
   ]);
 };
